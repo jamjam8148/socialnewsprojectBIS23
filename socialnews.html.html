@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social News Program</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #4a6fa5 0%, #3a5980 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            min-height: 500px;
+        }
+        
+        .menu-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            background-color: #f9fafc;
+            border-right: 1px solid #eaeef2;
+        }
+        
+        .links-section {
+            flex: 2;
+            min-width: 400px;
+            padding: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #3a5980;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eaeef2;
+        }
+        
+        .menu-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .menu-btn {
+            padding: 15px 20px;
+            background-color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #4a6fa5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .menu-btn:hover {
+            background-color: #4a6fa5;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(74, 111, 165, 0.2);
+        }
+        
+        .active-btn {
+            background-color: #4a6fa5;
+            color: white;
+        }
+        
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .form-container.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #4a6fa5;
+        }
+        
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: #4a6fa5;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a5980;
+        }
+        
+        .btn-secondary {
+            background-color: #eaeef2;
+            color: #555;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d4dbe4;
+        }
+        
+        .links-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        
+        .link-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #4a6fa5;
+        }
+        
+        .link-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .link-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #3a5980;
+            margin-bottom: 5px;
+        }
+        
+        .link-url {
+            color: #4a6fa5;
+            text-decoration: none;
+            word-break: break-all;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .link-url:hover {
+            text-decoration: underline;
+        }
+        
+        .link-author {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .link-index {
+            background-color: #eaeef2;
+            color: #4a6fa5;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .remove-btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .remove-btn:hover {
+            background-color: #ff5252;
+        }
+        
+        .no-links {
+            text-align: center;
+            padding: 40px 20px;
+            color: #888;
+            font-size: 1.1rem;
+        }
+        
+        .alert-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .alert-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .alert-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #3a5980;
+        }
+        
+        .alert-message {
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .alert-close {
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin-left: auto;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9rem;
+            border-top: 1px solid #eaeef2;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .menu-section {
+                border-right: none;
+                border-bottom: 1px solid #eaeef2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Social News Program</h1>
+            <p class="tagline">Share, discover, and discuss interesting links from around the web</p>
+        </header>
+        
+        <div class="main-content">
+            <section class="menu-section">
+                <h2 class="section-title">Menu</h2>
+                <div class="menu-options">
+                    <button class="menu-btn active-btn" data-action="show">Show All Links</button>
+                    <button class="menu-btn" data-action="add">Add New Link</button>
+                    <button class="menu-btn" data-action="remove">Remove a Link</button>
+                    <button class="menu-btn" data-action="quit">Quit Program</button>
+                </div>
+                
+                <div class="form-container" id="addForm">
+                    <h3 class="section-title">Add New Link</h3>
+                    <form id="linkForm">
+                        <div class="form-group">
+                            <label for="title">Link Title</label>
+                            <input type="text" id="title" placeholder="Enter link title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="url">URL</label>
+                            <input type="text" id="url" placeholder="https://example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="author">Your Name</label>
+                            <input type="text" id="author" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">Add Link</button>
+                            <button type="button" class="btn btn-secondary" id="cancelAdd">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="form-container" id="removeForm">
+                    <h3 class="section-title">Remove a Link</h3>
+                    <div class="form-group">
+                        <label for="removeIndex">Link Index to Remove</label>
+                        <input type="number" id="removeIndex" placeholder="Enter link index number" min="1">
+                    </div>
+                    <div class="form-buttons">
+                        <button class="btn btn-primary" id="confirmRemove">Remove Link</button>
+                        <button class="btn btn-secondary" id="cancelRemove">Cancel</button>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="links-section">
+                <h2 class="section-title">Latest Links</h2>
+                <div class="links-container" id="linksContainer">
+                    <!-- Links will be dynamically added here -->
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p>Social News Program &copy; 2023 | All links are user-submitted</p>
+        </footer>
+    </div>
+    
+    <!-- Alert Modal -->
+    <div class="alert-modal" id="alertModal">
+        <div class="alert-content">
+            <h3 class="alert-title" id="alertTitle">Alert</h3>
+            <div class="alert-message" id="alertMessage"></div>
+            <button class="alert-close" id="alertClose">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Social News Program
+        class SocialNewsProgram {
+            constructor() {
+                this.links = [];
+                this.currentAction = 'show';
+                this.initSampleData();
+                this.initEventListeners();
+                this.showLinks();
+            }
+            
+            initSampleData() {
+                // Add some sample links for demonstration
+                this.addLink("MDN Web Docs", "https://developer.mozilla.org", "WebDev Fan");
+                this.addLink("JavaScript Info", "https://javascript.info", "Code Enthusiast");
+                this.addLink("CSS Tricks", "https://css-tricks.com", "Designer");
+            }
+            
+            initEventListeners() {
+                // Menu buttons
+                document.querySelectorAll('.menu-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const action = e.target.getAttribute('data-action');
+                        this.handleMenuAction(action);
+                    });
+                });
+                
+                // Add link form
+                document.getElementById('linkForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addNewLink();
+                });
+                
+                // Cancel add button
+                document.getElementById('cancelAdd').addEventListener('click', () => {
+                    this.showMenu('show');
+                });
+                
+                // Remove link button
+                document.getElementById('confirmRemove').addEventListener('click', () => {
+                    this.removeLinkByIndex();
+                });
+                
+                // Cancel remove button
+                document.getElementById('cancelRemove').addEventListener('click', () => {
+                    this.showMenu('show');
+                });
+                
+                // Alert modal close
+                document.getElementById('alertClose').addEventListener('click', () => {
+                    this.closeAlert();
+                });
+                
+                // Close modal on background click
+                document.getElementById('alertModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'alertModal') {
+                        this.closeAlert();
+                    }
+                });
+            }
+            
+            handleMenuAction(action) {
+                // Update active button
+                document.querySelectorAll('.menu-btn').forEach(btn => {
+                    btn.classList.remove('active-btn');
+                    if (btn.getAttribute('data-action') === action) {
+                        btn.classList.add('active-btn');
+                    }
+                });
+                
+                // Handle the action
+                switch(action) {
+                    case 'show':
+                        this.showLinks();
+                        break;
+                    case 'add':
+                        this.showAddForm();
+                        break;
+                    case 'remove':
+                        this.showRemoveForm();
+                        break;
+                    case 'quit':
+                        this.quitProgram();
+                        break;
+                }
+                
+                this.currentAction = action;
+            }
+            
+            showMenu(defaultAction = 'show') {
+                this.handleMenuAction(defaultAction);
+            }
+            
+            showLinks() {
+                this.hideAllForms();
+                this.renderLinks();
+            }
+            
+            showAddForm() {
+                this.hideAllForms();
+                document.getElementById('addForm').classList.add('active');
+                document.getElementById('title').focus();
+            }
+            
+            showRemoveForm() {
+                this.hideAllForms();
+                document.getElementById('removeForm').classList.add('active');
+                document.getElementById('removeIndex').focus();
+                
+                // Update placeholder to show valid range
+                const placeholder = this.links.length > 0 
+                    ? `Enter link index (1 to ${this.links.length})` 
+                    : 'No links to remove';
+                document.getElementById('removeIndex').placeholder = placeholder;
+            }
+            
+            hideAllForms() {
+                document.querySelectorAll('.form-container').forEach(form => {
+                    form.classList.remove('active');
+                });
+            }
+            
+            addLink(title, url, author) {
+                // Ensure URL starts with http:// or https://
+                let formattedUrl = url.trim();
+                if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+                    formattedUrl = 'http://' + formattedUrl;
+                }
+                
+                const newLink = {
+                    title: title.trim(),
+                    url: formattedUrl,
+                    author: author.trim(),
+                    id: Date.now() // Simple unique ID
+                };
+                
+                this.links.push(newLink);
+                return newLink;
+            }
+            
+            addNewLink() {
+                const title = document.getElementById('title').value;
+                const url = document.getElementById('url').value;
+                const author = document.getElementById('author').value;
+                
+                if (!title || !url || !author) {
+                    this.showAlert('Error', 'Please fill in all fields.');
+                    return;
+                }
+                
+                this.addLink(title, url, author);
+                
+                // Clear form
+                document.getElementById('linkForm').reset();
+                
+                // Show success message
+                this.showAlert('Success', 'Link added successfully!');
+                
+                // Show the updated list
+                this.showMenu('show');
+            }
+            
+            removeLinkByIndex() {
+                const indexInput = document.getElementById('removeIndex').value;
+                const index = parseInt(indexInput) - 1; // Convert to 0-based index
+                
+                if (!indexInput || isNaN(index)) {
+                    this.showAlert('Error', 'Please enter a valid link index.');
+                    return;
+                }
+                
+                if (index < 0 || index >= this.links.length) {
+                    this.showAlert('Error', `Invalid index. Please enter a number between 1 and ${this.links.length}.`);
+                    return;
+                }
+                
+                const removedLink = this.links[index];
+                this.links.splice(index, 1);
+                
+                // Clear input
+                document.getElementById('removeIndex').value = '';
+                
+                // Show confirmation
+                this.showAlert('Success', `Link "${removedLink.title}" has been removed.`);
+                
+                // Show updated list
+                this.showMenu('show');
+            }
+            
+            quitProgram() {
+                this.showAlert(
+                    'Goodbye!', 
+                    'Thank you for using the Social News Program. Refresh the page to start again.'
+                );
+            }
+            
+            renderLinks() {
+                const container = document.getElementById('linksContainer');
+                
+                if (this.links.length === 0) {
+                    container.innerHTML = '<div class="no-links">No links yet. Add your first link!</div>';
+                    return;
+                }
+                
+                let html = '';
+                this.links.forEach((link, index) => {
+                    html += `
+                        <div class="link-item">
+                            <div class="link-header">
+                                <div>
+                                    <div class="link-title">${link.title}</div>
+                                    <a href="${link.url}" target="_blank" class="link-url">${link.url}</a>
+                                </div>
+                                <span class="link-index">#${index + 1}</span>
+                            </div>
+                            <div class="link-author">Submitted by: ${link.author}</div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+            }
+            
+            showAlert(title, message) {
+                document.getElementById('alertTitle').textContent = title;
+                document.getElementById('alertMessage').textContent = message;
+                document.getElementById('alertModal').style.display = 'flex';
+            }
+            
+            closeAlert() {
+                document.getElementById('alertModal').style.display = 'none';
+            }
+        }
+        
+        // Initialize the program when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const program = new SocialNewsProgram();
+            
+            // Make program accessible globally for any additional interactions
+            window.socialNewsProgram = program;
+        });
+    </script>
+</body>
+</html>
